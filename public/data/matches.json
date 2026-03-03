@@ -1,0 +1,116 @@
+{
+  "MICMP": [
+    {
+      "id": "1",
+      "name": "Qualification 1",
+      "matchNumber": 1,
+      "team1": "3476",
+      "team1Name": "Enderbots",
+      "team2": "2056",
+      "team2Name": "KnightKrawler"
+    },
+    {
+      "id": "2",
+      "name": "Qualification 2",
+      "matchNumber": 2,
+      "team1": "1690",
+      "team1Name": "Cyber Knights",
+      "team2": "3476",
+      "team2Name": "Enderbots"
+    },
+    {
+      "id": "3",
+      "name": "Qualification 3",
+      "matchNumber": 3,
+      "team1": "2056",
+      "team1Name": "KnightKrawler",
+      "team2": "1690",
+      "team2Name": "Cyber Knights"
+    },
+    {
+      "id": "4",
+      "name": "Qualification 4",
+      "matchNumber": 4,
+      "team1": "3476",
+      "team1Name": "Enderbots",
+      "team2": "1690",
+      "team2Name": "Cyber Knights"
+    },
+    {
+      "id": "5",
+      "name": "Qualification 5",
+      "matchNumber": 5,
+      "team1": "2056",
+      "team1Name": "KnightKrawler",
+      "team2": "3476",
+      "team2Name": "Enderbots"
+    }
+  ],
+  "ONCMP": [
+    {
+      "id": "1",
+      "name": "Qualification 1",
+      "matchNumber": 1,
+      "team1": "1690",
+      "team1Name": "Cyber Knights",
+      "team2": "3476",
+      "team2Name": "Enderbots"
+    },
+    {
+      "id": "2",
+      "name": "Qualification 2",
+      "matchNumber": 2,
+      "team1": "2056",
+      "team1Name": "KnightKrawler",
+      "team2": "1690",
+      "team2Name": "Cyber Knights"
+    },
+    {
+      "id": "3",
+      "name": "Quarterfinal 1",
+      "matchNumber": 3,
+      "team1": "3476",
+      "team1Name": "Enderbots",
+      "team2": "2056",
+      "team2Name": "KnightKrawler"
+    }
+  ],
+  "CASF": [
+    {
+      "id": "1",
+      "name": "Qualification 1",
+      "matchNumber": 1,
+      "team1": "254",
+      "team1Name": "The Cheesy Poofs",
+      "team2": "1690",
+      "team2Name": "Cyber Knights"
+    },
+    {
+      "id": "2",
+      "name": "Qualification 2",
+      "matchNumber": 2,
+      "team1": "2056",
+      "team1Name": "KnightKrawler",
+      "team2": "254",
+      "team2Name": "The Cheesy Poofs"
+    },
+    {
+      "id": "3",
+      "name": "Qualification 3",
+      "matchNumber": 3,
+      "team1": "3476",
+      "team1Name": "Enderbots",
+      "team2": "1690",
+      "team2Name": "Cyber Knights"
+    },
+    {
+      "id": "4",
+      "name": "Qualification 4",
+      "matchNumber": 4,
+      "team1": "254",
+      "team1Name": "The Cheesy Poofs",
+      "team2": "3476",
+      "team2Name": "Enderbots"
+    }
+  ]
+}
