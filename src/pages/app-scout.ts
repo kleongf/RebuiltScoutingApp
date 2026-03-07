@@ -42,7 +42,11 @@ export class AppScout extends LitElement {
   @state() teleopBallsTransferred: number = 0;
   @state() teleopBricked: 0 | 1 = 0;
   @state() teleopPlayedDefense: 0 | 1 = 0;
-  @state() teleopScore: number = 0;
+  @state() totalScore: number = 0;
+
+  private get teleopScore(): number {
+    return Math.max(0, this.totalScore - this.autoScore);
+  }
 
   // Endgame tab data
   @state() endgameNotes: string = '';
@@ -86,6 +90,7 @@ export class AppScout extends LitElement {
         background: white;
         border-top: 1px solid var(--sl-color-neutral-200);
         display: flex;
+        justify-content: center;
         z-index: 100;
       }
 
@@ -201,8 +206,8 @@ export class AppScout extends LitElement {
     const state = appState.getState();
     if (state.selectedMatch) {
       this.selectedMatch = state.selectedMatch;
-      // Extract team number from the match - assume we're scouting team1
       this.teamNumber = parseInt(state.selectedMatch.team1, 10) || 0;
+      this.alliance = state.selectedMatch.alliance ?? 'red';
     }
   }
 
@@ -238,7 +243,7 @@ export class AppScout extends LitElement {
       this.teleopBallsTransferred,
       this.teleopBricked,
       this.teleopPlayedDefense,
-      this.teleopScore,
+      this.teleopScore,   // computed: totalScore - autoScore
     ];
 
     const endgameArr: EndgameArr = [
@@ -431,23 +436,21 @@ export class AppScout extends LitElement {
           <sl-tab-panel name="tele">
             <div class="tab-content">
               <div class="form-group">
-                <label for="balls-made">Balls Made</label>
-                <sl-input
-                  id="balls-made"
-                  type="number"
-                  value="${this.teleopBallsMade}"
-                  @sl-input="${(e: any) => (this.teleopBallsMade = parseInt(e.target.value, 10) || 0)}"
-                ></sl-input>
+                <label>Balls Made</label>
+                <div class="number-controls">
+                  <sl-button @click="${() => this.incrementCounter('teleopBallsMade', -10)}">−</sl-button>
+                  <div class="number-display">${this.teleopBallsMade}</div>
+                  <sl-button @click="${() => this.incrementCounter('teleopBallsMade', 10)}">+</sl-button>
+                </div>
               </div>
 
               <div class="form-group">
-                <label for="balls-transferred">Balls Transferred</label>
-                <sl-input
-                  id="balls-transferred"
-                  type="number"
-                  value="${this.teleopBallsTransferred}"
-                  @sl-input="${(e: any) => (this.teleopBallsTransferred = parseInt(e.target.value, 10) || 0)}"
-                ></sl-input>
+                <label>Balls Transferred</label>
+                <div class="number-controls">
+                  <sl-button @click="${() => this.incrementCounter('teleopBallsTransferred', -10)}">−</sl-button>
+                  <div class="number-display">${this.teleopBallsTransferred}</div>
+                  <sl-button @click="${() => this.incrementCounter('teleopBallsTransferred', 10)}">+</sl-button>
+                </div>
               </div>
 
               <div class="form-group">
@@ -469,12 +472,12 @@ export class AppScout extends LitElement {
               </div>
 
               <div class="form-group">
-                <label for="teleop-score">Teleop Score</label>
+                <label for="total-score">Total Score</label>
                 <sl-input
-                  id="teleop-score"
+                  id="total-score"
                   type="number"
-                  value="${this.teleopScore}"
-                  @sl-input="${(e: any) => (this.teleopScore = parseInt(e.target.value, 10) || 0)}"
+                  value="${this.totalScore}"
+                  @sl-input="${(e: any) => (this.totalScore = parseInt(e.target.value, 10) || 0)}"
                 ></sl-input>
               </div>
             </div>
@@ -517,7 +520,7 @@ export class AppScout extends LitElement {
               </div>
 
               <div class="form-group">
-                <label for="endgame-rating">Driver Rating (1-10)</label>
+                <label for="endgame-rating">Defense Rating (1-10)</label>
                 <sl-select
                   id="endgame-rating"
                   value="${this.endgameRating}"

@@ -68,12 +68,12 @@ export class AppEventInput extends LitElement {
     return html`
       <div id="container">
         <sl-card>
-          <h1>Robotics Scouting</h1>
+          <h1>Match Scouting</h1>
           <p>Enter the event code to get started:</p>
 
           <sl-input
             label="Event Code"
-            placeholder="e.g., MICMP"
+            placeholder="e.g., 2024casd"
             @input="${this.handleEventCodeChange}"
             value="${this.eventCode}"
           ></sl-input>
