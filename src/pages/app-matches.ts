@@ -5,6 +5,9 @@ import { resolveRouterPath } from '../router';
 import '@shoelace-style/shoelace/dist/components/card/card.js';
 import '@shoelace-style/shoelace/dist/components/button/button.js';
 import '@shoelace-style/shoelace/dist/components/icon/icon.js';
+import '@shoelace-style/shoelace/dist/components/input/input.js';
+import '@shoelace-style/shoelace/dist/components/select/select.js';
+import '@shoelace-style/shoelace/dist/components/option/option.js';
 
 import { styles } from '../styles/shared-styles';
 import { appState } from '../services/app-state';
@@ -24,6 +27,12 @@ export class AppMatches extends LitElement {
   @state() matchList: Match[] = [];
   @state() loading: boolean = true;
   @state() error: string = '';
+
+  // Custom match form
+  @state() customTeamNumber: string = '';
+  @state() customMatchNumber: string = '';
+  @state() customAlliance: 'red' | 'blue' = 'red';
+  @state() customError: string = '';
 
   static styles = [
     styles,
@@ -135,6 +144,39 @@ export class AppMatches extends LitElement {
         border-radius: var(--sl-border-radius-medium);
         border: 1px solid var(--sl-color-danger-300);
       }
+
+      .custom-match-card {
+        border: 1px solid var(--sl-color-neutral-300);
+        border-radius: var(--sl-border-radius-medium);
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .custom-match-header {
+        padding: 10px 14px;
+        background-color: var(--sl-color-neutral-100);
+        border-bottom: 1px solid var(--sl-color-neutral-200);
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .custom-match-body {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .custom-match-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .custom-match-error {
+        font-size: 12px;
+        color: var(--sl-color-danger-700);
+      }
     `
   ];
 
@@ -228,6 +270,40 @@ export class AppMatches extends LitElement {
     window.location.href = resolveRouterPath(`scout/${match.matchNumber}`);
   }
 
+  private scoutCustomMatch() {
+    this.customError = '';
+
+    const teamNum = parseInt(this.customTeamNumber, 10);
+    const matchNum = parseInt(this.customMatchNumber, 10);
+
+    if (!this.customTeamNumber || isNaN(teamNum) || teamNum <= 0) {
+      this.customError = 'Please enter a valid team number.';
+      return;
+    }
+    if (!this.customMatchNumber || isNaN(matchNum) || matchNum >= 0) {
+      this.customError = 'Match number must be a negative integer.';
+      return;
+    }
+
+    const customMatch: Match = {
+      id: `custom_${matchNum}`,
+      name: `Custom ${matchNum}`,
+      matchNumber: matchNum,
+      scheduledTime: '',
+      redTeams: [],
+      blueTeams: [],
+    };
+
+    const matchData = {
+      ...customMatch,
+      team1: String(teamNum),
+      team1Name: String(teamNum),
+      alliance: this.customAlliance,
+    };
+    appState.setState({ selectedMatchId: customMatch.id, selectedMatch: matchData });
+    window.location.href = resolveRouterPath(`scout/${matchNum}`);
+  }
+
   render() {
     if (this.loading) {
       return html`
@@ -252,6 +328,42 @@ export class AppMatches extends LitElement {
         <p class="subtitle">Select a team to scout:</p>
 
         <div class="matches-container">
+          <div class="custom-match-card">
+            <div class="custom-match-header">Scout a Custom Match</div>
+            <div class="custom-match-body">
+              <div class="custom-match-row">
+                <sl-input
+                  label="Team Number"
+                  type="number"
+                  placeholder="e.g. 1234"
+                  value="${this.customTeamNumber}"
+                  @sl-input="${(e: any) => (this.customTeamNumber = e.target.value)}"
+                ></sl-input>
+                <sl-input
+                  label="Match Number (negative)"
+                  type="number"
+                  placeholder="e.g. -1"
+                  value="${this.customMatchNumber}"
+                  @sl-input="${(e: any) => (this.customMatchNumber = e.target.value)}"
+                ></sl-input>
+              </div>
+              <sl-select
+                label="Alliance"
+                value="${this.customAlliance}"
+                @sl-change="${(e: any) => (this.customAlliance = e.target.value as 'red' | 'blue')}"
+              >
+                <sl-option value="red">Red</sl-option>
+                <sl-option value="blue">Blue</sl-option>
+              </sl-select>
+              ${this.customError
+                ? html`<p class="custom-match-error">${this.customError}</p>`
+                : ''}
+              <sl-button variant="primary" @click="${() => this.scoutCustomMatch()}">
+                Scout Custom Match
+              </sl-button>
+            </div>
+          </div>
+
           ${this.matchList.map(match => html`
             <div class="match-card">
               <div class="match-header">

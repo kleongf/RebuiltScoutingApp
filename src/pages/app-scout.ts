@@ -17,7 +17,7 @@ import { styles } from '../styles/shared-styles';
 import { appState } from '../services/app-state';
 // Type definitions for match data structure
 type AutoArr = [number[], number, 0 | 1, 0 | 1, 0 | 1];
-type TeleopArr = [number, number, 0 | 1, 0 | 1, number];
+type TeleopArr = [number, number, 0 | 1, 0 | 1, number, 0 | 1];
 type EndgameArr = [string, 0 | 1, number, number, number];
 type TeamInfoArr = [number, 'red' | 'blue', number];
 type MatchPayload = [AutoArr, TeleopArr, EndgameArr, TeamInfoArr];
@@ -42,6 +42,7 @@ export class AppScout extends LitElement {
   @state() teleopBallsTransferred: number = 0;
   @state() teleopBricked: 0 | 1 = 0;
   @state() teleopPlayedDefense: 0 | 1 = 0;
+  @state() teleopShootOnMove: 0 | 1 = 0;
   @state() totalScore: number = 0;
 
   private get teleopScore(): number {
@@ -244,6 +245,7 @@ export class AppScout extends LitElement {
       this.teleopBricked,
       this.teleopPlayedDefense,
       this.teleopScore,   // computed: totalScore - autoScore
+      this.teleopShootOnMove,
     ];
 
     const endgameArr: EndgameArr = [
@@ -280,6 +282,7 @@ export class AppScout extends LitElement {
         teleopArr[2] === 1,                   // bricked (0|1 -> boolean)
         teleopArr[3] === 1,                   // playedDefense (0|1 -> boolean)
         teleopArr[4],                         // score (number, unchanged)
+        teleopArr[5] === 1,                   // shootOnMove (0|1 -> boolean)
       ],
       [
         endgameArr[0],                        // notes (string, unchanged)
@@ -350,7 +353,7 @@ export class AppScout extends LitElement {
               <div class="form-group">
                 <label>Field Map</label>
                 <img
-                  src="/assets/field-map.png"
+                  src="${this.alliance === 'blue' ? '/assets/field-map-blue.png' : '/assets/field-map.png'}"
                   alt="Field path map"
                   style="width: 100%; border-radius: var(--sl-border-radius-medium); border: 1px solid var(--sl-color-neutral-200);"
                 />
@@ -468,6 +471,15 @@ export class AppScout extends LitElement {
                   @sl-change="${() => this.toggleSwitch('teleopPlayedDefense')}"
                 >
                   Played Defense
+                </sl-switch>
+              </div>
+
+              <div class="form-group">
+                <sl-switch
+                  ?checked="${this.teleopShootOnMove === 1}"
+                  @sl-change="${() => this.toggleSwitch('teleopShootOnMove')}"
+                >
+                  Shoot On the Move
                 </sl-switch>
               </div>
 
