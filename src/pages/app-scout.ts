@@ -355,7 +355,7 @@ export class AppScout extends LitElement {
                 <img
                   src="${this.alliance === 'blue' ? '/assets/field-map-blue.png' : '/assets/field-map.png'}"
                   alt="Field path map"
-                  style="width: 100%; border-radius: var(--sl-border-radius-medium); border: 1px solid var(--sl-color-neutral-200);"
+                  style="width: 50%; border-radius: var(--sl-border-radius-medium); border: 1px solid var(--sl-color-neutral-200);"
                 />
               </div>
 
